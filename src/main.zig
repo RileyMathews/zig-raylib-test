@@ -17,15 +17,9 @@ pub fn main() anyerror!void {
     var fps: f32 = 0.0;
 
     var game_time: f32 = 0.0;
+    var text_buffer: [32]u8 = undefined; 
 
-    //--------------------------------------------------------------------------------------
-
-    // Main game loop
-    while (!rl.windowShouldClose()) { // Detect window close button or ESC key
-        // Update
-        //----------------------------------------------------------------------------------
-        // TODO: Update your variables here
-        //----------------------------------------------------------------------------------
+    while (!rl.windowShouldClose()) {
         const frameTime = rl.getFrameTime();
         refresh_timer += frameTime;
         game_time += frameTime;
@@ -34,8 +28,6 @@ pub fn main() anyerror!void {
             fps = 1.0 / frameTime;
         }
 
-        // Draw
-        //----------------------------------------------------------------------------------
         rl.beginDrawing();
         defer rl.endDrawing();
 
@@ -44,9 +36,9 @@ pub fn main() anyerror!void {
 
         rl.drawText("Congrats! You created your first window!", 200, 200, 20, .white);
 
-        var buf: [32]u8 = undefined;
-        const cstr = try std.fmt.bufPrintZ(&buf, "game time: {:.0}", .{game_time});
-        rl.drawText(cstr, 200, 220, 20, .lime);
-        //----------------------------------------------------------------------------------
+        const gameTimeString = try std.fmt.bufPrintZ(&text_buffer, "Time: {:.0}s", .{game_time});
+        rl.drawText(gameTimeString, 200, 220, 20, .lime);
+        const frametimeString = try std.fmt.bufPrintZ(&text_buffer, "Frame Time: {:.3}ms", .{frameTime * 1000.0});
+        rl.drawText(frametimeString, 200, 240, 20, .lime);
     }
 }
