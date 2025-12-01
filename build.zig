@@ -41,11 +41,11 @@ pub fn build(b: *std.Build) void {
         .target = target,
     });
 
-
     // raylib dependency
     const raylib_dep = b.dependency("raylib_zig", .{
         .target = target,
         .optimize = optimize,
+        .raudio = false, // Disable raylib's audio to avoid conflicts with zaudio
     });
 
     // miniaudio dependency
@@ -101,6 +101,9 @@ pub fn build(b: *std.Build) void {
 
     exe.root_module.addImport("zaudio", zaudio.module("root"));
     exe.linkLibrary(zaudio.artifact("miniaudio"));
+
+    // Allow duplicate symbols by using wrapper approach
+    exe.linkLibC();
 
     // This declares intent for the executable to be installed into the
     // install prefix when running `zig build` (i.e. when executing the default
