@@ -23,7 +23,9 @@ pub fn main() anyerror!void {
     rl.initWindow(screenWidth, screenHeight, "raylib-zig [core] example - basic window");
     defer rl.closeWindow(); // Close window and OpenGL context
 
-    rl.setConfigFlags(.{.vsync_hint = true,});
+    rl.setConfigFlags(.{
+        .vsync_hint = true,
+    });
 
     while (!rl.windowShouldClose()) { // Detect window close button or ESC key
         rl.beginDrawing();
